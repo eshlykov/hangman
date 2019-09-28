@@ -1,14 +1,10 @@
-class Hangman(dictionaryPath: String, maxMistakeCount: Int, secretLetter: Char) {
+class Hangman(word: String,
+              maxMistakeCount: Int,
+              secretLetter: Char,
+              readChar: () => Char = scala.io.StdIn.readChar) {
   def run(): Unit = {
-    val word = chooseWord
     val template = secretLetter.toString * word.length
     game(word, template, 0)
-  }
-
-  private def chooseWord: String = {
-    val random = scala.util.Random
-    val dictionary = new Dictionary(dictionaryPath).toList
-    dictionary(random.nextInt(dictionary.length))
   }
 
   private def game(word: String, template: String, mistakeCount: Int): Unit = {
@@ -31,7 +27,7 @@ class Hangman(dictionaryPath: String, maxMistakeCount: Int, secretLetter: Char) 
     if (mistakeCount == maxMistakeCount)
       printLoseMessage()
     else {
-      val char = readChar
+      val char = takeGuess
       if (isHit(word, template, char)) {
         processHit(template, char)
       } else {
@@ -40,9 +36,9 @@ class Hangman(dictionaryPath: String, maxMistakeCount: Int, secretLetter: Char) 
     }
   }
 
-  private def readChar: Char = {
+  private def takeGuess: Char = {
     printGuessMessage()
-    scala.io.StdIn.readChar.toUpper
+    readChar().toUpper
   }
 
   private def isHit(word: String, template: String, char: Char): Boolean =
