@@ -24,9 +24,9 @@ class Hangman(word: String,
       game(word, template, mistakeCount)
     }
 
-    if (mistakeCount == maxMistakeCount)
+    if (mistakeCount == maxMistakeCount) {
       printLoseMessage()
-    else {
+    } else {
       val char = takeGuess
       if (isHit(word, template, char)) {
         processHit(template, char)
